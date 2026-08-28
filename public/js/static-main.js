@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         div.dataset.index = index;
 
         const img = document.createElement('img');
-        img.alt = 'ZHUANG.WENDI's Photos';
+        img.alt = "ZHUANG.WENDI's Photos";
         img.loading = 'lazy';
         img.decoding = 'async';
         // Photos이 도착하기 전에도 같은 비율의 자리를 차지하게 한다.
