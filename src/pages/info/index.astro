@@ -4,7 +4,7 @@ import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import aboutData from '../../data/about.json';
 
-// Admin에서 비운 항목은 사이트에서 사라진다. (예: 출생을 비우면 그 줄만 없어짐)
+// 后台留空的条目不会显示在前台（例如出生年份留空就隐藏那一行）。
 const about = aboutData as {
   name: string;
   bio?: string;
@@ -16,7 +16,7 @@ const about = aboutData as {
 };
 const has = (v?: string | string[]) => (Array.isArray(v) ? v.length > 0 : !!v && v.trim() !== '');
 
-// 원본의 <br> 구조 재현 — 있는 항목만 이어 붙인다.
+// 复现原先的 <br> 结构 —— 只拼接有内容的条目。
 const aboutHtml = [about.name, has(about.bio) ? about.bio!.replace(/\n/g, '<br>') : null]
   .filter(Boolean)
   .join('<br><br>') + '<br><br>';
@@ -38,7 +38,7 @@ const hasContact = has(about.email) || has(about.instagram);
 >
   <SiteHeader active="info" />
 
-  <!-- 서브 메뉴 -->
+  <!-- 子菜单 -->
   <div class="submenu-container">
     <nav class="submenu">
       <div class="submenu-item">
@@ -53,7 +53,7 @@ const hasContact = has(about.email) || has(about.instagram);
   </div>
 
   <main>
-    <!-- About 섹션 -->
+    <!-- 简介区块 -->
     <section id="about-section" class="content-section submenu-content" style="display:block;">
       <div class="container-full multilingual">
         <div class="about-content multilingual flex2column">
@@ -69,7 +69,7 @@ const hasContact = has(about.email) || has(about.instagram);
       </div>
     </section>
 
-    <!-- Contact 섹션 -->
+    <!-- 联系方式区块 -->
     <section id="contact-section" class="content-section submenu-content" style="display:none;">
       <div class="container-full multilingual">
         <div class="contact-info">

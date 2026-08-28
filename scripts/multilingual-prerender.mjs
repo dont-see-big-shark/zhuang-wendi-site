@@ -1,17 +1,17 @@
-// 빌드된 HTML 안에서 .multilingual 영역의 글자를 미리 감싼다.
+// 在构建出的 HTML 里，预先把 .multilingual 区域的文字分段包裹。
 //
-// 원래는 브라우저가 jquery.multilingual 로 하던 일이다. 그런데 그 변환은
-// 한글/영문/숫자마다 글자 크기·굵기를 바꾸기 때문에(예: 16px/600 → 20px/800),
-// 화면이 이미 그려진 뒤에 실행되면 글자가 한 번 튄다. 콘텐츠가 정적이니
-// 같은 결과를 빌드 때 만들어 두면 튐이 사라진다.
+// 这本来是浏览器里 jquery.multilingual 做的事。但它会给韩文/英文/数字
+// 分别套用不同的字号和字重（如 16px/600 → 20px/800），如果等页面绘制完成
+// 再执行，文字会跳一下。内容是静态的，把同样的结果提前到构建期完成，
+// 跳动就消失了。
 //
-// 규칙은 플러그인과 동일하게 맞춘다(jquery.multilingual.min.js 의 regexs).
+// 分段规则与插件保持一致（jquery.multilingual.min.js 的 regexs）。
 
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-// 감쌀 순서 = 런타임 호출 순서 ['ko', 'en', 'num', 'punct']
+// 包裹顺序 = 运行时调用顺序 ['ko', 'en', 'num', 'punct']
 const GROUPS = [
   ['ml-ko', '[ㄱ-ㅎ가-힣ㅏ-ㅣ]+'],
   ['ml-en', '[A-Za-z]+'],
@@ -20,7 +20,7 @@ const GROUPS = [
 ];
 const TOKEN = new RegExp(GROUPS.map(([, re]) => '(' + re + ')').join('|'), 'gm');
 
-// 엔티티(&amp; 등) 안쪽은 건드리면 안 되므로 잘라 두고 나머지에만 적용한다.
+// HTML 实体（&amp; 等）内部不能改动，先切出来，只处理其余部分。
 const ENTITY = /(&(?:#\d+|#x[0-9a-fA-F]+|[a-zA-Z][a-zA-Z0-9]*);)/;
 
 function wrapText(text) {
@@ -37,12 +37,12 @@ function wrapText(text) {
     .join('');
 }
 
-// 태그는 그대로 두고 텍스트에만 적용
+// 标签保持原样，只处理文本
 function wrapRegion(html) {
   return html.replace(/<[^>]*>|[^<]+/g, (seg) => (seg[0] === '<' ? seg : wrapText(seg)));
 }
 
-// 여는 태그 위치에서 짝이 맞는 닫는 태그의 끝 위치를 찾는다.
+// 从开标签位置找到配对闭标签的结束位置。
 function findEnd(html, tag, from) {
   const re = new RegExp(`<${tag}\\b[^>]*>|</${tag}\\s*>`, 'gi');
   re.lastIndex = from;
@@ -65,12 +65,12 @@ export function prerenderMultilingual(html) {
   let count = 0;
   let m;
   while ((m = open.exec(html))) {
-    if (m.index < cursor) continue; // 이미 처리한 영역 안쪽(중첩)은 건너뛴다
+    if (m.index < cursor) continue; // 已处理区域内部（嵌套）直接跳过
     const end = findEnd(html, m[1], m.index);
     if (end === -1) continue;
     const region = html.slice(m.index, end);
     out += html.slice(cursor, m.index);
-    // 스크립트가 섞인 영역은 손대지 않고 런타임에 맡긴다
+    // 含脚本的区域不做处理，交给运行时
     out += /<script\b/i.test(region) ? region : wrapRegion(region);
     cursor = end;
     count++;
@@ -102,7 +102,7 @@ export default function multilingualPrerender() {
           files++;
           regions += count;
         }
-        logger.info(`글자 감싸기 완료: ${files}개 파일, ${regions}개 영역`);
+        logger.info(`文字包裹完成: ${files} 个文件，${regions} 个区域`);
       },
     },
   };

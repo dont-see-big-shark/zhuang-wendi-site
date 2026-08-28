@@ -1,33 +1,33 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
-// CMS가 비운 옵션 필드('' / null)를 undefined로 정규화.
+// 把 CMS 留空的可选字段（'' / null）规范化为 undefined。
 const optString = z.preprocess(
   (v) => (v === '' || v == null ? undefined : v),
   z.string().optional(),
 );
 
-// 사진 작업 (홈 모자이크 + works PHOTOS 섹션 공용)
+// 摄影作品（首页拼图和 Works 的 PHOTOS 区共用）
 const photos = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/photos' }),
   schema: z.object({
     title: z.string(),
     year: optString,
-    order: z.number().default(0), // 표출 순서
-    description: optString, // 작가노트 (Phase 3에서 채움)
-    photos: z.array(z.string()).default([]), // 순서 있는 이미지 경로
+    order: z.number().default(0), // 显示顺序
+    description: optString, // 创作说明（可选）
+    photos: z.array(z.string()).default([]), // 有序图片路径
     hidden: z.boolean().default(false),
   }),
 });
 
-// 출판 (works BOOKS 섹션)
+// 出版（Works 的 BOOKS 区）
 const books = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/books' }),
   schema: z.object({
     title: z.string(),
     year: optString,
     order: z.number().default(0),
-    buyLink: optString, // 구매 링크 (선택)
+    buyLink: optString, // 购买链接（可选）
     description: optString,
     photos: z.array(z.string()).default([]),
     hidden: z.boolean().default(false),

@@ -1,6 +1,6 @@
 ---
-// Sveltia CMS Admin 패널. Astro 라우트로 두면 dev 서버에서도 /admin/ 으로 열린다.
-// 설정은 public/admin/config.yml 로 서빙되며 아래 link 로 가리킨다.
+// Sveltia CMS 后台。放在 Astro 路由里，开发服务器也能通过 /admin/ 打开。
+// 配置由 public/admin/config.yml 提供，通过下面的 link 指定。
 ---
 
 <!doctype html>
@@ -16,9 +16,9 @@
     <script is:inline src="https://unpkg.com/@sveltia/cms@0.177.0/dist/sveltia-cms.js"></script>
 
     <!--
-      프리뷰 창에 사이트 폰트·타이포를 입힌다.
-      프리뷰의 마크업은 CMS가 만든 구조라 사이트 레이아웃 CSS(.project-row 등)는 적용되지 않는다.
-      그래서 레이아웃 규칙이 엉뚱하게 먹지 않도록, 사이트에서 쓰는 서체 계열만 주입한다.
+      给预览窗口套用站点的字体和排版。
+      预览的标记结构由 CMS 生成，站点的布局 CSS（.project-row 等）不会生效，
+      所以只注入站点用到的字体族，避免布局规则错误命中。
     -->
     <script is:inline>
       (function waitForCMS(tries) {
@@ -26,9 +26,9 @@
           if (tries > 0) setTimeout(function () { waitForCMS(tries - 1); }, 100);
           return;
         }
-        // 한글/영문 혼합 타이포 규칙 (사이트와 동일한 파일)
+        // 中英混排排版规则（与站点使用同一文件）
         window.CMS.registerPreviewStyle('/css/multilingual.css');
-        // 사이트 서체·기본 조판만 최소로
+        // 仅最小化注入站点字体与基础排版
         window.CMS.registerPreviewStyle(
           [
             '@import url("https://use.typekit.net/umq6buz.css");',

@@ -12,7 +12,7 @@ const books = (await getCollection('books'))
   .filter((p) => !p.data.hidden)
   .sort((a, b) => a.data.order - b.data.order);
 
-// data-project(slug) → 최적화 webp URL 배열 (works.js가 window에서 읽음)
+// data-project(slug) → 优化后的 webp URL 数组（works.js 从 window 读取）
 const worksImages: Record<string, string[]> = {};
 
 const photoItems = [];
@@ -38,7 +38,7 @@ for (const b of books) {
 >
   <SiteHeader active="works" />
 
-  <!-- 서브 메뉴 -->
+  <!-- 子菜单 -->
   <div class="submenu-container multilingual">
     <nav class="submenu">
       <div class="submenu-item">
@@ -51,7 +51,7 @@ for (const b of books) {
   </div>
 
   <main class="multilingual">
-    <!-- Photos 섹션 -->
+    <!-- PHOTOS 区块 -->
     <section id="photos-section" class="works-section submenu-content" style="display:block;">
       <div class="project-list">
         {
@@ -79,7 +79,7 @@ for (const b of books) {
       </div>
     </section>
 
-    <!-- 출판 섹션 -->
+    <!-- 出版区块 -->
     <section id="books-section" class="works-section submenu-content" style="display:none;">
       <div class="project-list">
         {

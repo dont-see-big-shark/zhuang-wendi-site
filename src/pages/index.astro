@@ -5,18 +5,18 @@ import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import { resolvePhotos } from '../lib/images';
 
-// 홈 모자이크 = 모든 Photos 작업의 이미지 (순서는 JS가 셔플)
+// 首页拼图 = 所有摄影作品的图片（顺序由 JS 随机打乱）
 const projects = (await getCollection('photos'))
   .filter((p) => !p.data.hidden)
   .sort((a, b) => a.data.order - b.data.order);
 
 const photos = await resolvePhotos(projects.flatMap((p) => p.data.photos));
-// 격자에는 작은 이미지를, 확대해서 볼 때는 큰 이미지를 쓴다.
+// 网格用小图，放大查看时用大图。
 const homeImages = photos.map((p) => ({ t: p.thumb, ss: p.srcset, f: p.full, w: p.w, h: p.h }));
 ---
 
 <BaseLayout title="ZHUANG.WENDI - Portfolio" ogPath="" themeColor="#000000">
-  <!-- 초기 로딩 화면 -->
+  <!-- 初始加载画面 -->
   <div class="loading-page" id="loading-page">
     <img src="/src/SVG/titlelogo-horizontal-white.svg" alt="ZHUANG.WENDI Logo" class="loading-logo" />
   </div>
@@ -24,7 +24,7 @@ const homeImages = photos.map((p) => ({ t: p.thumb, ss: p.srcset, f: p.full, w: 
   <SiteHeader />
 
   <main>
-    <!-- 이미지 그리드 (static-main.js가 동적 삽입) -->
+    <!-- 图片网格（由 static-main.js 动态插入） -->
     <div class="image-grid columns-1" id="image-grid"></div>
     <div class="loading-indicator" id="loading-indicator">
       <div class="spinner"></div>
@@ -33,7 +33,7 @@ const homeImages = photos.map((p) => ({ t: p.thumb, ss: p.srcset, f: p.full, w: 
 
   <SiteFooter />
 
-  <!-- 갤러리 모달 (라이트박스) -->
+  <!-- 画廊弹窗（灯箱） -->
   <div class="gallery-modal" id="gallery-modal">
     <div class="gallery-overlay"></div>
     <div class="gallery-container">
@@ -49,16 +49,16 @@ const homeImages = photos.map((p) => ({ t: p.thumb, ss: p.srcset, f: p.full, w: 
     </div>
   </div>
 
-  <!-- 하단 컨트롤 (그리드 열 ±, 컬러 필터) -->
+  <!-- 底部控制条（网格列数 ±，颜色滤镜） -->
   <div class="bottom-controls">
     <button id="grid-decrease" class="grid-btn decrease-btn">
       <img src="/src/SVG/web-button/button_button-left-minus-01-on.svg" alt="Decrease" class="btn-svg active" />
       <img src="/src/SVG/web-button/button_button-left-minus-02-off.svg" alt="Decrease disabled" class="btn-svg disabled" />
     </button>
     <button id="color-filter-toggle" class="color-filter-btn">
-      <img src="/src/SVG/web-button/button_button-middle-filter-01-blue.svg" alt="블루 필터" class="filter-svg blue" />
-      <img src="/src/SVG/web-button/button_button-middle-filter-02-black.svg" alt="흑백 필터" class="filter-svg grayscale" />
-      <img src="/src/SVG/web-button/button_button-middle-filter-03-color.svg" alt="컬러 필터" class="filter-svg color" />
+      <img src="/src/SVG/web-button/button_button-middle-filter-01-blue.svg" alt="蓝色滤镜" class="filter-svg blue" />
+      <img src="/src/SVG/web-button/button_button-middle-filter-02-black.svg" alt="黑白滤镜" class="filter-svg grayscale" />
+      <img src="/src/SVG/web-button/button_button-middle-filter-03-color.svg" alt="彩色滤镜" class="filter-svg color" />
     </button>
     <button id="grid-increase" class="grid-btn increase-btn">
       <img src="/src/SVG/web-button/button_button-right-plus-01-on.svg" alt="Increase" class="btn-svg active" />

@@ -1,5 +1,5 @@
 ---
-// 표기 연도는 사이트를 만든 시점을 따른다.
+// 页面里显示的年份以建站时间为准。
 const year = new Date().getFullYear();
 ---
 
@@ -10,8 +10,8 @@ const year = new Date().getFullYear();
 </footer>
 
 <script is:inline>
-  // 해가 바뀐 뒤 아직 사이트를 다시 만들지 않았다면 보는 사람 기준 연도로 바로잡는다.
-  // 글자 감싸기(ml-num)를 유지하려고 안쪽 요소가 있으면 그쪽 글자만 바꾼다.
+  // 跨年之后若还没重新构建，直接按访问者本地年份纠正。
+  // 为了保留文字包裹（ml-num），有内层元素时只改内层文字。
   (function () {
     var el = document.querySelector('[data-year]');
     if (!el) return;
