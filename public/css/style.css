@@ -1,0 +1,1094 @@
+/* 확장된 CSS 리셋 (Normalize.css 기반) */
+/* 사파리는 화면을 축소하거나 좁은 화면에서 글자가 작다고 판단하면 임의로 키운다
+   (자동 텍스트 확대). 이 사이트는 헤더처럼 글자 크기가 곧 레이아웃인 곳이 있어,
+   글자만 부풀면 조합이 통째로 어긋난다. 지정한 크기를 그대로 쓰게 한다. */
+/* 헤더와 본문이 같은 여백을 쓰도록 기준값을 문서 전체에 둔다.
+   (실제 값은 스크립트가 헤더의 렌더 폭에서 계산해 덮어쓴다) */
+:root {
+    /* 페이지 좌우 여백: 헤더·본문·격자가 모두 이 값을 쓴다 */
+    --pad: 1.5rem;
+    /* 헤더 기준값: 여백을 뺀 나머지 폭에서 계산한다(스크립트가 실제 폭으로 덮어씀) */
+    --u: calc((100vw - 2 * var(--pad)) * 0.102);
+}
+
+html,
+body,
+header {
+    /* 사파리는 화면 배율이나 폭에 따라 글자를 임의로 키운다(자동 텍스트 확대).
+       이 사이트의 헤더는 글자 크기가 곧 레이아웃이라 글자만 부풀면 조합이 무너진다.
+       100% 로는 무시되는 경우가 있어 none 으로 못박는다. */
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+}
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+}
+
+/* 스크롤바 숨기기 (모든 브라우저 대응) */
+html, body {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+html::-webkit-scrollbar, 
+body::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+/* 모든 요소의 스크롤바 숨기기 */
+* {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+*::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    font-size: 62.5%; /* 1rem = 10px */
+    scroll-behavior: smooth;
+    font-family: 'AppleSDGothicNeo', 'Noto Sans KR', sans-serif;
+}
+
+body {
+    font-family: "neue-haas-grotesk-display", "pretendard", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    line-height: 1.6;
+    color: black;
+    background-color: #fff;
+    min-height: 100vh;
+    text-rendering: optimizeSpeed;
+    word-break: keep-all;
+}
+
+/* 이미지 기본 설정 */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border-style: none;
+}
+
+/* 링크 기본 설정 */
+a {
+    text-decoration: none;
+    color: inherit;
+    background-color: transparent;
+}
+p a {
+    text-decoration: underline;
+}
+/* 데스크톱에서만 호버 효과 적용 */
+@media (min-width: 769px) {
+    a:hover {
+        color: navy;
+        transition: .6s;
+    }
+}
+/* 목록 기본 설정 */
+ul, ol {
+    list-style: none;
+}
+
+/* 버튼 기본 설정 */
+button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font: inherit;
+    -webkit-appearance: button;
+    appearance: button;
+    text-transform: none;
+    overflow: visible;
+    padding: 0;
+}
+
+/* 입력 필드 기본 설정 */
+input, textarea, select, button {
+    font: inherit;
+    margin: 0;
+}
+
+input, textarea {
+    border: 1px solid #ddd;
+}
+
+input {
+    overflow: visible;
+}
+
+textarea {
+    overflow: auto;
+    resize: vertical;
+}
+
+[type="checkbox"],
+[type="radio"] {
+    box-sizing: border-box;
+    padding: 0;
+}
+
+/* 헤딩 태그 스타일 조정 */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 0.5em;
+}
+
+h1 {
+    font-size: 2.4rem;
+}
+
+h2 {
+    font-size: 2.4rem;
+    word-spacing: -2rem;
+}
+
+h3 {
+    font-size: 1.8rem;
+}
+
+p {
+    font-size: 1.8rem;
+    font-weight: 400;
+}
+
+/* 컨테이너 클래스 */
+.container {
+    width: 100%;
+    max-width: 120rem;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* 유틸리티 클래스 */
+.hidden {
+    display: none;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+/* 헤더 스타일 */
+header {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    /* 헤더는 하나의 그림처럼 통째로 확대·축소되어야 한다.
+       기준값(--u) 하나를 두고 안쪽 치수를 모두 그 배수로 계산한다.
+       글자 크기나 퍼센트 높이에 기대면 브라우저마다(특히 사파리) 다르게 풀리므로 쓰지 않는다. */
+    padding: var(--pad);
+    z-index: 100;
+}
+h2 {
+    font-size: 6rem;
+    line-height: 0.8;
+    word-spacing: -1.25vw;
+
+}
+
+.header-container {
+    max-width: 100%;
+    height: var(--u);
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    align-items: flex-start;
+    align-self: flex-start;
+}
+
+.site-title {
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.site-title a {
+    text-decoration: none;
+}
+
+.site-title {
+    height: 100%;
+    width: auto;
+}
+.site-logo {
+    /* 퍼센트 높이는 부모 사슬을 타느라 브라우저마다 갈린다. 기준값에서 바로 잡는다. */
+    height: var(--u);
+    width: auto;
+    aspect-ratio: 1986.19 / 212.89;
+    display: block;
+}
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--u) * 0.125);
+}
+nav {
+    padding-top: calc(var(--u) * 0.13);
+    height: 100%;
+}
+
+nav ul {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    margin-left: calc(var(--u) * 0.125);
+    justify-content: space-between;
+}
+
+nav a {
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: -0.05em;
+
+}
+nav h2 {
+    font-size: calc(var(--u) * 0.46);
+    line-height: 0.55;
+    align-items: bottom;
+
+}
+
+
+/* 하단 컨트롤 버튼들 스타일 */
+.bottom-controls {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* 그리드 열 수 조절 버튼 스타일 */
+.grid-btn {
+    width: 3rem;
+    height: 3rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 0;
+}
+
+/* 데스크톱에서만 호버 효과 적용 */
+@media (min-width: 769px) {
+    .grid-btn:hover {
+        transform: scale(1.1);
+    }
+}
+
+.grid-btn:disabled {
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* 색상 필터 토글 버튼 스타일 */
+.color-filter-btn {
+    width: 3.5rem;
+    height: 3.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 0;
+}
+
+/* 데스크톱에서만 호버 효과 적용 */
+@media (min-width: 769px) {
+    .color-filter-btn:hover {
+        transform: scale(1.1);
+    }
+}
+
+
+
+/* SVG 버튼 이미지 스타일 */
+.btn-svg, .filter-svg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: all 0.3s ease;
+    pointer-events: none; /* 이미지 클릭 이벤트 방지 */
+}
+
+/* 버튼 SVG 상태 관리 */
+.btn-svg.disabled,
+.filter-svg.grayscale,
+.filter-svg.color {
+    display: none;
+}
+
+.btn-svg.active,
+.filter-svg.blue {
+    display: block;
+}
+
+/* 비활성화된 버튼에서 disabled 이미지 표시 */
+.grid-btn:disabled .btn-svg.active {
+    display: none;
+}
+
+.grid-btn:disabled .btn-svg.disabled {
+    display: block;
+}
+
+/* 필터 버튼 상태에 따른 이미지 표시 */
+.color-filter-btn.grayscale .filter-svg.blue {
+    display: none;
+}
+
+.color-filter-btn.grayscale .filter-svg.grayscale {
+    display: block;
+}
+
+.color-filter-btn.no-filter .filter-svg.blue,
+.color-filter-btn.no-filter .filter-svg.grayscale {
+    display: none;
+}
+
+.color-filter-btn.no-filter .filter-svg.color {
+    display: block;
+}
+
+/* 메인 컨텐츠 스타일 */
+main {
+    max-width: 100%;
+    margin: 0 auto;
+    /* 좌우 여백은 헤더와 같은 값으로 맞춘다(로고·글자 시작선과 사진 시작선 정렬) */
+    padding: 1rem var(--pad);
+    padding-top: 0;
+    background-color: #fff;
+    position: relative;
+    z-index: 1;
+}
+
+/* 로딩 페이지 스타일 */
+.loading-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transform: translateY(0);
+    transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.loading-page.slide-up {
+    transform: translateY(-100%);
+}
+
+.loading-logo {
+    width: 200px;
+    height: auto;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+/* 로딩 인디케이터 스타일 */
+.loading-indicator {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+/* 이미지 그리드 스타일 */
+.image-grid {
+    display: grid;
+    gap: 1rem;
+    transition: all 2s ease;
+    opacity: 0;
+    transform: translateY(20px);
+    background-color: #fff;
+    position: relative;
+    z-index: 2;
+}
+
+.image-grid.loaded {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 열 수에 따른 그리드 설정 */
+.image-grid.columns-1 {
+    grid-template-columns: 1fr;
+}
+
+.image-grid.columns-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.image-grid.columns-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.image-grid.columns-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.image-grid.columns-5 {
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.image-grid.columns-6 {
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.image-grid.columns-7 {
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.image-grid.columns-8 {
+    grid-template-columns: repeat(8, 1fr);
+}
+
+.image-grid.columns-9 {
+    grid-template-columns: repeat(9, 1fr);
+}
+
+.image-grid.columns-10 {
+    grid-template-columns: repeat(10, 1fr);
+}
+
+/* 이미지 아이템 스타일 */
+.image-item {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.image-item.loaded {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.image-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    transition: transform 0.3s ease, filter 1s ease;
+    /* filter: grayscale(100%); */
+    filter: sepia(100%) hue-rotate(180deg) saturate(200%);
+}
+
+/* 필터는 JavaScript에서 동적으로 적용됩니다 */
+
+/* 호버 효과 (마우스가 있는 넓은 화면에서만).
+   확대는 공간감을 만들어 이 사이트의 평면적인 성격과 어긋나므로 쓰지 않는다.
+   대신 '지금 걸려 있는 색상 모드에서 다른 모드로 바뀌는' 반응을 준다.
+     블루 → 흑백 / 흑백 → 블루 / 원본 → 블루
+   대상은 칸이 아니라 이미지 자체다(칸은 행 높이만큼 늘어나 사진 아래 여백까지 포함한다).
+   inline 로 지정된 색상 모드를 덮어써야 하므로 !important 가 필요하다. */
+@media (min-width: 769px) and (hover: hover) {
+    .image-item img {
+        transition: filter 0.25s ease;
+    }
+
+    .image-grid.mode-blue .image-item img:hover {
+        filter: grayscale(100%) !important;
+    }
+
+    .image-grid.mode-grayscale .image-item img:hover,
+    .image-grid.mode-none .image-item img:hover {
+        filter: sepia(100%) hue-rotate(180deg) saturate(200%) !important;
+    }
+}
+
+/* 이미지 비율에 따른 스타일 */
+.image-item.landscape {
+    grid-column: span 2;
+}
+
+.image-item.portrait {
+    grid-row: span 2;
+}
+
+.image-item.square {
+    grid-column: span 1;
+    grid-row: span 1;
+}
+
+/* 갤러리 모달 스타일 */
+.gallery-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+}
+
+.gallery-modal.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gallery-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.gallery-container {
+    position: relative;
+    width: 80%;
+    max-height: 80vh; /* 세로 여백 확보 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 80px; /* 좌우 여백 증가 */
+}
+
+.gallery-image-container {
+    width: 80%;
+    max-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gallery-image {
+    max-width: 90%;
+    max-height: 90vh;
+    object-fit: contain;
+    filter: none; /* 갤러리에서는 흑백 필터 제거 */
+}
+.gallery-image img {
+    max-height: 50vh;
+}
+
+#gallery-image {
+    max-height: 90vh;
+}
+
+.gallery-close {
+    position: absolute;
+    top: 0px;
+    right: 20px;
+    color: #fff;
+    font-size: 2.4rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding-top: 0px;
+    z-index: 1001;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gallery-prev, .gallery-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 15px;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+    z-index: 1001;
+    width: 0px;
+    height: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gallery-prev {
+    left: 20px;
+}
+
+.gallery-next {
+    right: 20px;
+}
+
+/* 데스크톱에서만 호버 효과 적용 */
+@media (min-width: 769px) {
+    .gallery-prev:hover, .gallery-next:hover, .gallery-close:hover {
+        opacity: 1;
+    }
+}
+
+.flex2column {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: top;
+    gap: 1rem;
+}
+.flex2column-spacebetween {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1rem;
+}
+.rightalign {
+    text-align: right;
+}       
+.centeralign {
+    text-align: center;
+}
+.submenu-item2 {
+    width: 100%;
+        height: 100%;
+}
+
+.button-buy {
+   padding-right: 1rem;
+   text-decoration: underline;
+   text-underline-offset: .5rem;
+}
+
+
+
+/* 푸터 스타일 */
+footer {
+    background-color: #fff;
+    padding: 1rem;
+    text-align: left;
+    margin-top: 2rem;
+}
+
+.footer-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 0rem;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 1400px) {
+    .image-grid.columns-10,
+    .image-grid.columns-9 {
+        grid-template-columns: repeat(8, 1fr);
+    }
+}
+
+@media (max-width: 1200px) {
+    .image-grid.columns-10,
+    .image-grid.columns-9,
+    .image-grid.columns-8 {
+        grid-template-columns: repeat(7, 1fr);
+    }
+}
+
+@media (max-width: 992px) {
+    .image-grid.columns-10,
+    .image-grid.columns-9,
+    .image-grid.columns-8,
+    .image-grid.columns-7 {
+        grid-template-columns: repeat(6, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .image-grid.columns-10,
+    .image-grid.columns-9,
+    .image-grid.columns-8,
+    .image-grid.columns-7,
+    .image-grid.columns-6 {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .image-grid {
+        gap: 0.5rem;
+    }
+    
+    .gallery-container {
+        width: 95%;
+        padding: 0 60px; /* 모바일에서 좌우 여백 조정 */
+    }
+    
+    .gallery-prev, .gallery-next {
+        width: 40px;
+        height: 40px;
+        font-size: 2.4rem;
+    }
+    
+    .gallery-close {
+        font-size: 2rem;
+        width: 36px;
+        height: 36px;
+    }
+    /* 좁은 화면에서는 기준값만 바꾼다. 안쪽 비율은 그대로 따라온다. */
+    :root {
+        /* 좁은 화면에서는 헤더가 남는 폭을 꽉 채운다 */
+        --u: calc((100vw - 2 * var(--pad)) * 0.1061);
+    }
+}
+
+@media (max-width: 576px) {
+    .image-grid.columns-10,
+    .image-grid.columns-9,
+    .image-grid.columns-8,
+    .image-grid.columns-7,
+    .image-grid.columns-6,
+    .image-grid.columns-5 {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .image-grid.columns-10,
+    .image-grid.columns-9,
+    .image-grid.columns-8,
+    .image-grid.columns-7,
+    .image-grid.columns-6,
+    .image-grid.columns-5,
+    .image-grid.columns-4 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .gallery-container {
+        width: 100%;
+        padding: 0 40px; /* 작은 화면에서 좌우 여백 더 줄임 */
+    }
+    
+    .gallery-prev, .gallery-next {
+        width: 36px;
+        height: 36px;
+        font-size: 2rem;
+        padding: 10px;
+    }
+    
+    .gallery-close {
+        font-size: 1.8rem;
+        width: 32px;
+        height: 32px;
+    }
+}
+
+@media (max-width: 360px) {
+    .image-grid.columns-10,
+    .image-grid.columns-9,
+    .image-grid.columns-8,
+    .image-grid.columns-7,
+    .image-grid.columns-6,
+    .image-grid.columns-5,
+    .image-grid.columns-4,
+    .image-grid.columns-3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+} 
+
+/* ── 상세보기(라이트박스) 개편 (2026-08) ─────────────────────
+   기존에는 컨테이너 80% × 이미지컨테이너 80% × 이미지 90% 로 중첩 축소되어
+   확대해서 본 사진이 1열 썸네일보다 작아 보였다. 중첩을 없애고 화면을 채운다. */
+@media (min-width: 769px) {
+    .gallery-container {
+        width: 100%;
+        max-height: 100vh;
+        padding: 0 88px; /* 좌우 화살표 자리만 확보 */
+    }
+    .gallery-image-container {
+        width: 100%;
+        max-height: 90vh;
+    }
+    #gallery-image {
+        max-width: 100%;
+        max-height: 90vh;
+    }
+}
+
+/* 모바일: 사진은 화면 폭을 꽉 채우고, 조작 버튼은 하단으로 모은다.
+   좌우에 버튼이 있으면 사진이 그만큼 좁아져 '크게 본다'는 느낌이 사라진다. */
+@media (max-width: 768px) {
+    .gallery-container {
+        width: 100%;
+        height: 100%;
+        max-height: none;
+        padding: 0;
+    }
+    .gallery-image-container {
+        width: 100%;
+        height: 100%;
+        max-height: none;
+        padding: 0 0.4rem;
+    }
+    #gallery-image {
+        max-width: 100%;
+        max-height: calc(100vh - 9rem); /* 하단 조작 바 자리 */
+    }
+
+    .gallery-prev,
+    .gallery-next {
+        top: auto;
+        bottom: 1.4rem;
+        transform: none;
+        width: 4.4rem;
+        height: 4.4rem;
+        padding: 0;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.14);
+        opacity: 1;
+        font-size: 1.6rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .gallery-prev {
+        left: 50%;
+        margin-left: -5.4rem;
+    }
+    .gallery-next {
+        right: 50%;
+        margin-right: -5.4rem;
+    }
+
+    .gallery-close {
+        top: 1rem;
+        right: 1rem;
+        width: 4rem;
+        height: 4rem;
+        font-size: 2.4rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery-container {
+        width: 100%;
+        padding: 0;
+    }
+    .gallery-prev,
+    .gallery-next {
+        width: 4rem;
+        height: 4rem;
+        font-size: 1.5rem;
+        padding: 0;
+    }
+}
+
+/* 상세보기가 열리면 뒤 배경을 확실히 눌러 사진에 집중시키고,
+   홈의 그리드 조절 버튼은 잠시 감춘다(반투명 배경 위로 비쳐 겹쳐 보였다). */
+.gallery-modal {
+    /* 뒤 배경이 살짝 비치는 정도 */
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+.gallery-modal.active ~ .bottom-controls {
+    display: none;
+}
+
+/* 상세보기 화살표: 채워진 삼각형 → 얇은 흰 선 화살표.
+   모바일에서는 원형 배경을 없애고 화면 좌우 끝에 붙여 사진을 가리지 않게 한다. */
+.gallery-prev svg,
+.gallery-next svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.gallery-prev,
+.gallery-next {
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .gallery-prev,
+    .gallery-next {
+        top: auto;
+        /* 최하단에 붙이되 아이폰 홈 인디케이터와는 겹치지 않게 */
+        bottom: max(0.4rem, env(safe-area-inset-bottom, 0px));
+        transform: none;
+        background: none;
+        border-radius: 0;
+        width: 3.2rem;
+        height: 3.2rem;
+        padding: 0;
+        margin: 0;
+        opacity: 0.85;
+    }
+    .gallery-prev {
+        left: 0.6rem;
+        margin-left: 0;
+    }
+    .gallery-next {
+        right: 0.6rem;
+        margin-right: 0;
+    }
+
+    /* 하단 화살표 자리만 비우고 나머지는 사진에 준다 */
+    #gallery-image {
+        max-height: calc(100vh - 5.5rem);
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery-prev,
+    .gallery-next {
+        width: 2.8rem;
+        height: 2.8rem;
+    }
+}
+
+
+/* 데스크톱도 모바일과 같은 얇은 선 화살표. 위치는 좌우 끝, 세로 가운데. */
+@media (min-width: 769px) {
+    .gallery-prev,
+    .gallery-next {
+        top: 50%;
+        bottom: auto;
+        transform: translateY(-50%);
+        width: 3.6rem;
+        height: 3.6rem;
+        padding: 0;
+        background: none;
+        border-radius: 0;
+        opacity: 0.85;
+    }
+    .gallery-prev {
+        left: 1.6rem;
+    }
+    .gallery-next {
+        right: 1.6rem;
+    }
+}
+
+/* 홈 그리드: 열 수 선택 폭을 넓힘 (11~16단 추가) */
+.image-grid.columns-11 { grid-template-columns: repeat(11, 1fr); }
+.image-grid.columns-12 { grid-template-columns: repeat(12, 1fr); }
+.image-grid.columns-13 { grid-template-columns: repeat(13, 1fr); }
+.image-grid.columns-14 { grid-template-columns: repeat(14, 1fr); }
+.image-grid.columns-15 { grid-template-columns: repeat(15, 1fr); }
+.image-grid.columns-16 { grid-template-columns: repeat(16, 1fr); }
+
+/* 좁은 화면의 상한도 함께 완화 (기존에는 3~4단에서 막혔다) */
+@media (max-width: 576px) {
+    .image-grid.columns-7,
+    .image-grid.columns-8,
+    .image-grid.columns-9,
+    .image-grid.columns-10,
+    .image-grid.columns-11,
+    .image-grid.columns-12,
+    .image-grid.columns-13,
+    .image-grid.columns-14,
+    .image-grid.columns-15,
+    .image-grid.columns-16 {
+        grid-template-columns: repeat(6, 1fr);
+    }
+    .image-grid.columns-5 { grid-template-columns: repeat(5, 1fr); }
+    .image-grid.columns-6 { grid-template-columns: repeat(6, 1fr); }
+}
+
+@media (max-width: 480px) {
+    .image-grid.columns-6,
+    .image-grid.columns-7,
+    .image-grid.columns-8,
+    .image-grid.columns-9,
+    .image-grid.columns-10,
+    .image-grid.columns-11,
+    .image-grid.columns-12,
+    .image-grid.columns-13,
+    .image-grid.columns-14,
+    .image-grid.columns-15,
+    .image-grid.columns-16 {
+        grid-template-columns: repeat(5, 1fr);
+    }
+    .image-grid.columns-4 { grid-template-columns: repeat(4, 1fr); }
+    .image-grid.columns-5 { grid-template-columns: repeat(5, 1fr); }
+}
+
+@media (max-width: 360px) {
+    .image-grid.columns-5,
+    .image-grid.columns-6,
+    .image-grid.columns-7,
+    .image-grid.columns-8,
+    .image-grid.columns-9,
+    .image-grid.columns-10,
+    .image-grid.columns-11,
+    .image-grid.columns-12,
+    .image-grid.columns-13,
+    .image-grid.columns-14,
+    .image-grid.columns-15,
+    .image-grid.columns-16 {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    .image-grid.columns-3 { grid-template-columns: repeat(3, 1fr); }
+    .image-grid.columns-4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* 초기 로딩 중 문서 높이가 늘어날 때 브라우저가 스크롤을 따라 밀지 않도록.
+   (스크롤 앵커링이 켜져 있으면 첫 화면이 잘린 채 시작한다) */
+#image-grid {
+    overflow-anchor: none;
+}
+
+/* 확대해서 볼 수 있다는 표시도 사진 위에서만 */
+.image-item img {
+    cursor: pointer;
+}

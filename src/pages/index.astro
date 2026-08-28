@@ -1,0 +1,75 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { resolvePhotos } from '../lib/images';
+
+// 홈 모자이크 = 모든 Photos 작업의 이미지 (순서는 JS가 셔플)
+const projects = (await getCollection('photos'))
+  .filter((p) => !p.data.hidden)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const photos = await resolvePhotos(projects.flatMap((p) => p.data.photos));
+// 격자에는 작은 이미지를, 확대해서 볼 때는 큰 이미지를 쓴다.
+const homeImages = photos.map((p) => ({ t: p.thumb, ss: p.srcset, f: p.full, w: p.w, h: p.h }));
+---
+
+<BaseLayout title="ZHUANG.WENDI - Portfolio" ogPath="" themeColor="#000000">
+  <!-- 초기 로딩 화면 -->
+  <div class="loading-page" id="loading-page">
+    <img src="/src/SVG/titlelogo-horizontal-white.svg" alt="ZHUANG.WENDI Logo" class="loading-logo" />
+  </div>
+
+  <SiteHeader />
+
+  <main>
+    <!-- 이미지 그리드 (static-main.js가 동적 삽입) -->
+    <div class="image-grid columns-1" id="image-grid"></div>
+    <div class="loading-indicator" id="loading-indicator">
+      <div class="spinner"></div>
+    </div>
+  </main>
+
+  <SiteFooter />
+
+  <!-- 갤러리 모달 (라이트박스) -->
+  <div class="gallery-modal" id="gallery-modal">
+    <div class="gallery-overlay"></div>
+    <div class="gallery-container">
+      <button class="gallery-prev" id="gallery-prev" aria-label="Previous photo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 6 12 15 21" /></svg>
+      </button>
+      <button class="gallery-next" id="gallery-next" aria-label="Next photo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 3 18 12 9 21" /></svg>
+      </button>
+      <div class="gallery-image-container">
+        <img id="gallery-image" src="" alt="Gallery image" />
+      </div>
+    </div>
+  </div>
+
+  <!-- 하단 컨트롤 (그리드 열 ±, 컬러 필터) -->
+  <div class="bottom-controls">
+    <button id="grid-decrease" class="grid-btn decrease-btn">
+      <img src="/src/SVG/web-button/button_button-left-minus-01-on.svg" alt="Decrease" class="btn-svg active" />
+      <img src="/src/SVG/web-button/button_button-left-minus-02-off.svg" alt="Decrease disabled" class="btn-svg disabled" />
+    </button>
+    <button id="color-filter-toggle" class="color-filter-btn">
+      <img src="/src/SVG/web-button/button_button-middle-filter-01-blue.svg" alt="블루 필터" class="filter-svg blue" />
+      <img src="/src/SVG/web-button/button_button-middle-filter-02-black.svg" alt="흑백 필터" class="filter-svg grayscale" />
+      <img src="/src/SVG/web-button/button_button-middle-filter-03-color.svg" alt="컬러 필터" class="filter-svg color" />
+    </button>
+    <button id="grid-increase" class="grid-btn increase-btn">
+      <img src="/src/SVG/web-button/button_button-right-plus-01-on.svg" alt="Increase" class="btn-svg active" />
+      <img src="/src/SVG/web-button/button_button-right-plus-02-off.svg" alt="Increase disabled" class="btn-svg disabled" />
+    </button>
+  </div>
+
+  <Fragment slot="scripts">
+    <script is:inline define:vars={{ homeImages }}>
+      window.__HOME_IMAGES__ = homeImages;
+    </script>
+    <script is:inline src="/js/static-main.js"></script>
+  </Fragment>
+</BaseLayout>

@@ -1,0 +1,89 @@
+# Sveltia CMS 설정 (Decap 호환 스키마)
+
+backend:
+  name: github
+  repo: YOUR_GITHUB_USERNAME/zhuang-wendi-site
+  branch: main
+  # OAuth 프록시(워커) — 프로덕션(/admin)에서 GitHub 로그인에 사용.
+  # 이 워커의 허용 도메인 목록에 zhuangwendi.vercel.app 이 포함돼 있어야 로그인이 통과한다.
+  base_url: https://your-sveltia-auth-worker.workers.dev
+
+# local_backend 는 localhost 전용(GitHub 로그인 없이 로컬 폴더로 테스트). 프로덕션에선 자동 무시.
+local_backend: true
+
+# 올릴 때 브라우저에서 미리 변환한다. 저장소에는 변환본만 들어가고 원본은 남지 않는다.
+# (커밋된 뒤에 줄이면 git 이력에 원본이 그대로 남아 용량이 줄지 않는다.)
+media_libraries:
+  default:
+    config:
+      transformations:
+        raster_image:
+          format: webp
+          quality: 85
+          width: 2400
+
+media_folder: "src/assets"
+public_folder: "/src/assets"
+
+collections:
+  - name: photos
+    label: 사진 작업 (PHOTOS)
+    label_singular: 사진 작업
+    folder: "src/content/photos"
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    sortable_fields: [order, title, year]
+    fields:
+      - { name: title, label: 제목, widget: string }
+      - { name: year, label: 연도, widget: string, required: false }
+      - { name: order, label: "표출 순서 (작을수록 먼저)", widget: number, value_type: int, default: 0, required: false }
+      - name: photos
+        label: "사진 (여러 장 업로드 · 드래그로 순서 조정)"
+        widget: list
+        required: false
+        field: { name: image, label: 이미지, widget: image, media_folder: "/src/assets/photos/{{slug}}", public_folder: "/src/assets/photos/{{slug}}" }
+      - { name: hidden, label: 비공개(숨김), widget: boolean, default: false, required: false }
+      - { name: body, label: 작가노트, widget: markdown, required: false }
+
+  - name: books
+    label: 출판 (BOOKS)
+    label_singular: 출판
+    folder: "src/content/books"
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    sortable_fields: [order, title, year]
+    fields:
+      - { name: title, label: 제목, widget: string }
+      - { name: year, label: 연도, widget: string, required: false }
+      - { name: order, label: "표출 순서 (작을수록 먼저)", widget: number, value_type: int, default: 0, required: false }
+      - { name: buyLink, label: 구매 링크 (선택), widget: string, required: false }
+      - name: photos
+        label: "이미지 (여러 장 업로드 · 드래그로 순서 조정)"
+        widget: list
+        required: false
+        field: { name: image, label: 이미지, widget: image, media_folder: "/src/assets/books/{{slug}}", public_folder: "/src/assets/books/{{slug}}" }
+      - { name: hidden, label: 비공개(숨김), widget: boolean, default: false, required: false }
+      - { name: body, label: 설명, widget: markdown, required: false }
+
+  - name: settings
+    label: 사이트 정보
+    files:
+      - name: about
+        label: 소개 / 연락
+        file: "src/data/about.json"
+        fields:
+          - { name: name, label: 이름, widget: string }
+          - { name: bio, label: 소개 문구, widget: text, required: false }
+          - { name: birth, label: "출생 (비우면 사이트에 표시되지 않음)", widget: string, required: false }
+          - name: cv
+            label: 경력 (한 줄씩 · 비우면 표시되지 않음)
+            widget: list
+            required: false
+            field: { name: item, label: 항목, widget: string }
+          - { name: email, label: 이메일 (비우면 표시되지 않음), widget: string, required: false }
+          - { name: instagram, label: 인스타그램 URL (비우면 표시되지 않음), widget: string, required: false }
+          - { name: instagramHandle, label: 인스타그램 표시명, widget: string, required: false }

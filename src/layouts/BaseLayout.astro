@@ -1,0 +1,125 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  ogPath?: string; // og:url 경로 (예: "/works/")
+  themeColor?: string; // 홈=#000000, 나머지=#ffffff
+  extraCss?: string[]; // 페이지별 추가 스타일시트
+  bodyClass?: string;
+}
+const {
+  title,
+  description = 'ZHUANG.WENDI Portfolio Website',
+  ogPath = '',
+  themeColor = '#ffffff',
+  extraCss = [],
+  bodyClass,
+} = Astro.props;
+const ogUrl = `https://www.zhuangwendi.vercel.app${ogPath}`;
+// 메신저·SNS 미리보기는 상대 경로를 못 읽는 곳이 많아 절대 주소로 준다.
+const ogImage = 'https://www.zhuangwendi.vercel.app/src/favicons/opengraph.png';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="keywords" content="ZHUANG.WENDI, Photos, Portfolio, gallery" />
+    <title>{title}</title>
+
+    <!-- 파비콘 -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/src/favicons/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/src/favicons/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/src/favicons/favicon-16x16.png" />
+    <link rel="icon" type="image/x-icon" href="/src/favicons/favicon.ico" />
+    <link rel="shortcut icon" href="/src/favicons/favicon.ico" />
+    <meta name="theme-color" content={themeColor} />
+
+    <!-- OpenGraph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:url" content={ogUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ZHUANG.WENDI" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/multilingual.css" />
+    {extraCss.map((href) => <link rel="stylesheet" href={href} />)}
+
+    <!-- Adobe Typekit (neue-haas-grotesk-display) -->
+    <link rel="stylesheet" href="https://use.typekit.net/umq6buz.css" />
+    <script is:inline>
+      (function (d) {
+        var config = { kitId: 'ovn6qqy', scriptTimeout: 3000, async: true },
+          h = d.documentElement,
+          t = setTimeout(function () {
+            h.className = h.className.replace(/\bwf-loading\b/g, '') + ' wf-inactive';
+          }, config.scriptTimeout),
+          tk = d.createElement('script'),
+          f = false,
+          s = d.getElementsByTagName('script')[0],
+          a;
+        h.className += ' wf-loading';
+        tk.src = 'https://use.typekit.net/' + config.kitId + '.js';
+        tk.async = true;
+        tk.onload = tk.onreadystatechange = function () {
+          a = this.readyState;
+          if (f || (a && a != 'complete' && a != 'loaded')) return;
+          f = true;
+          clearTimeout(t);
+          try {
+            Typekit.load(config);
+          } catch (e) {}
+        };
+        s.parentNode.insertBefore(tk, s);
+      })(document);
+    </script>
+  </head>
+  <body class={bodyClass}>
+    <slot />
+
+    <!-- 헤더 기준값: vw 대신 실제 렌더 폭에서 잡는다.
+         사파리는 화면 배율이 걸리면 vw 를 배율 전 폭으로 계산해서(레이아웃은 배율 후 폭)
+         헤더만 몇 배로 커진다. 실제 폭을 재면 배율과 무관하게 항상 맞는다. -->
+    <script is:inline>
+      (function () {
+        var header = document.querySelector('header');
+        if (!header) return;
+        function setUnit() {
+          var w = header.clientWidth || document.documentElement.clientWidth;
+          if (!w) return;
+          // clientWidth 는 좌우 여백을 포함하므로, 여백을 뺀 나머지에서 기준값을 잡는다
+          var pad = parseFloat(getComputedStyle(header).paddingLeft) || 0;
+          var avail = w - pad * 2;
+          document.documentElement.style.setProperty('--u', avail * (w <= 768 ? 0.1061 : 0.102) + 'px');
+        }
+        setUnit();
+        addEventListener('resize', setUnit);
+        addEventListener('orientationchange', setUnit);
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(setUnit);
+      })();
+    </script>
+
+    <!-- jQuery + multilingual (KO/EN 타이포 전환) -->
+    <script is:inline src="/js/jquery-3.7.1.min.js"></script>
+    <script is:inline src="/js/jquery.multilingual.min.js"></script>
+    <script is:inline>
+      $(function () {
+        // 빌드 때 미리 감싼 페이지는 건너뛴다(개발 서버 등 감싸지 않은 경우만 처리)
+        var pending = $('.multilingual').filter(function () {
+          return !this.querySelector('span[class^="ml-"]');
+        });
+        if (pending.length) pending.multilingual(['ko', 'en', 'num', 'punct']);
+      });
+    </script>
+    <slot name="scripts" />
+  </body>
+</html>

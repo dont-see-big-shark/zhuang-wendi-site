@@ -1,0 +1,22 @@
+---
+// 표기 연도는 사이트를 만든 시점을 따른다.
+const year = new Date().getFullYear();
+---
+
+<footer class="multilingual">
+  <div class="footer-container multilingual">
+    <p>&copy; <span data-year>{year}</span> ZHUANG.WENDI. ALL RIGHTS RESERVED.</p>
+  </div>
+</footer>
+
+<script is:inline>
+  // 해가 바뀐 뒤 아직 사이트를 다시 만들지 않았다면 보는 사람 기준 연도로 바로잡는다.
+  // 글자 감싸기(ml-num)를 유지하려고 안쪽 요소가 있으면 그쪽 글자만 바꾼다.
+  (function () {
+    var el = document.querySelector('[data-year]');
+    if (!el) return;
+    var target = el.querySelector('[class^="ml-"]') || el;
+    var now = String(new Date().getFullYear());
+    if (target.textContent.trim() !== now) target.textContent = now;
+  })();
+</script>

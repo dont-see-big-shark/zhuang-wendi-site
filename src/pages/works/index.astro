@@ -1,0 +1,122 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import { resolvePhotos } from '../../lib/images';
+
+const photos = (await getCollection('photos'))
+  .filter((p) => !p.data.hidden)
+  .sort((a, b) => a.data.order - b.data.order);
+const books = (await getCollection('books'))
+  .filter((p) => !p.data.hidden)
+  .sort((a, b) => a.data.order - b.data.order);
+
+// data-project(slug) → 최적화 webp URL 배열 (works.js가 window에서 읽음)
+const worksImages: Record<string, string[]> = {};
+
+const photoItems = [];
+for (const p of photos) {
+  worksImages[p.id] = (await resolvePhotos(p.data.photos)).map((x) => x.mid);
+  const { Content } = await render(p);
+  photoItems.push({ data: p.data, slug: p.id, Content });
+}
+const bookItems = [];
+for (const b of books) {
+  worksImages[b.id] = (await resolvePhotos(b.data.photos)).map((x) => x.mid);
+  const { Content } = await render(b);
+  bookItems.push({ data: b.data, slug: b.id, Content });
+}
+---
+
+<BaseLayout
+  title="ZHUANG.WENDI - Works"
+  description="ZHUANG.WENDI's Portfolio - Works"
+  ogPath="/works/"
+  themeColor="#ffffff"
+  extraCss={['//cdn.jsdelivr.net/npm/font-applesdgothicneo@1.0/all.min.css', '/css/works.css']}
+>
+  <SiteHeader active="works" />
+
+  <!-- 서브 메뉴 -->
+  <div class="submenu-container multilingual">
+    <nav class="submenu">
+      <div class="submenu-item">
+        <h3 class="multilingual"><button class="submenu-btn left active" data-target="photos-section">Photos PHOTOS</button></h3>
+      </div>
+      <div class="submenu-item">
+        <h3 class="multilingual"><button class="submenu-btn" data-target="books-section">BOOKS</button></h3>
+      </div>
+    </nav>
+  </div>
+
+  <main class="multilingual">
+    <!-- Photos 섹션 -->
+    <section id="photos-section" class="works-section submenu-content" style="display:block;">
+      <div class="project-list">
+        {
+          photoItems.map((it) => {
+            const Body = it.Content;
+            return (
+              <div class="project-row">
+                <div class="project-info-col">
+                  <div class="flex2column-spacebetween">
+                    <h4 class="project-title">{it.data.title} {it.data.year && <div class="project-year">{it.data.year}</div>}</h4>
+                  </div>
+                  <div class="project-description"><Body /></div>
+                  <div class="more-text" />
+                </div>
+                <div class="project-gallery-col" data-project={it.slug}>
+                  <div class="gallery-slider">
+                    <div class="slider-container" />
+                  </div>
+                  <div class="slider-counter" aria-hidden="true">1</div>
+                </div>
+              </div>
+            );
+          })
+        }
+      </div>
+    </section>
+
+    <!-- 출판 섹션 -->
+    <section id="books-section" class="works-section submenu-content" style="display:none;">
+      <div class="project-list">
+        {
+          bookItems.map((it) => {
+            const Body = it.Content;
+            return (
+              <div class="project-row">
+                <div class="project-info-col">
+                  <div class="flex2column-spacebetween">
+                    <h4 class="project-title">{it.data.title} {it.data.year && <div class="project-year">{it.data.year}</div>}</h4>
+                    {it.data.buyLink && (
+                      <p class="button-buy"><a href={it.data.buyLink}>BUY↗</a></p>
+                    )}
+                  </div>
+                  <div class="project-description"><Body /></div>
+                  <div class="more-text" />
+                </div>
+                <div class="project-gallery-col" data-project={it.slug}>
+                  <div class="gallery-slider">
+                    <div class="slider-container" />
+                  </div>
+                  <div class="slider-counter" aria-hidden="true">1</div>
+                </div>
+              </div>
+            );
+          })
+        }
+      </div>
+    </section>
+  </main>
+
+  <SiteFooter />
+
+  <Fragment slot="scripts">
+    <script is:inline define:vars={{ worksImages }}>
+      window.__WORKS_IMAGES__ = worksImages;
+    </script>
+    <script is:inline src="/js/works.js"></script>
+  </Fragment>
+</BaseLayout>

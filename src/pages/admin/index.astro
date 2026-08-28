@@ -1,0 +1,46 @@
+---
+// Sveltia CMS Admin 패널. Astro 라우트로 두면 dev 서버에서도 /admin/ 으로 열린다.
+// 설정은 public/admin/config.yml 로 서빙되며 아래 link 로 가리킨다.
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>ZHUANG.WENDI — Admin</title>
+    <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
+  </head>
+  <body>
+    <script is:inline src="https://unpkg.com/@sveltia/cms@0.177.0/dist/sveltia-cms.js"></script>
+
+    <!--
+      프리뷰 창에 사이트 폰트·타이포를 입힌다.
+      프리뷰의 마크업은 CMS가 만든 구조라 사이트 레이아웃 CSS(.project-row 등)는 적용되지 않는다.
+      그래서 레이아웃 규칙이 엉뚱하게 먹지 않도록, 사이트에서 쓰는 서체 계열만 주입한다.
+    -->
+    <script is:inline>
+      (function waitForCMS(tries) {
+        if (typeof window.CMS === 'undefined') {
+          if (tries > 0) setTimeout(function () { waitForCMS(tries - 1); }, 100);
+          return;
+        }
+        // 한글/영문 혼합 타이포 규칙 (사이트와 동일한 파일)
+        window.CMS.registerPreviewStyle('/css/multilingual.css');
+        // 사이트 서체·기본 조판만 최소로
+        window.CMS.registerPreviewStyle(
+          [
+            '@import url("https://use.typekit.net/umq6buz.css");',
+            'body{font-family:"neue-haas-grotesk-display","pretendard",-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;',
+            'line-height:1.6;color:#000;}',
+            'h1,h2,h3,h4{font-weight:700;line-height:1.25;}',
+            'p{margin:0 0 0.8em;}',
+            'img{max-width:100%;height:auto;display:block;}',
+          ].join(''),
+          { raw: true },
+        );
+      })(50);
+    </script>
+  </body>
+</html>

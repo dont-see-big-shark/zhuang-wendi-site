@@ -1,0 +1,24 @@
+---
+interface Props {
+  active?: 'info' | 'works';
+}
+const { active } = Astro.props;
+---
+
+<header>
+  <div class="header-container">
+    <h1 class="site-title">
+      <a href="/">
+        <img src="/src/SVG/titlelogo-horizontal-black.svg" alt="ZHUANG.WENDI Logo" class="site-logo" />
+      </a>
+    </h1>
+    <div class="header-controls">
+      <nav>
+        <ul>
+          <li><h2><a href="/info/" class={active === 'info' ? 'active' : undefined}>INFO</a></h2></li>
+          <li><h2><a href="/works/" class={active === 'works' ? 'active' : undefined}>WORKS</a></h2></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>

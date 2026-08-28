@@ -1,0 +1,96 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import aboutData from '../../data/about.json';
+
+// Admin에서 비운 항목은 사이트에서 사라진다. (예: 출생을 비우면 그 줄만 없어짐)
+const about = aboutData as {
+  name: string;
+  bio?: string;
+  birth?: string;
+  cv?: string[];
+  email?: string;
+  instagram?: string;
+  instagramHandle?: string;
+};
+const has = (v?: string | string[]) => (Array.isArray(v) ? v.length > 0 : !!v && v.trim() !== '');
+
+// 원본의 <br> 구조 재현 — 있는 항목만 이어 붙인다.
+const aboutHtml = [about.name, has(about.bio) ? about.bio!.replace(/\n/g, '<br>') : null]
+  .filter(Boolean)
+  .join('<br><br>') + '<br><br>';
+const careerHtml = [
+  has(about.birth) ? about.birth : null,
+  has(about.cv) ? about.cv!.join('<br>') : null,
+]
+  .filter(Boolean)
+  .join('<br><br>');
+const hasContact = has(about.email) || has(about.instagram);
+---
+
+<BaseLayout
+  title="ZHUANG.WENDI - About"
+  description="ZHUANG.WENDI's Portfolio - About"
+  ogPath="/info/"
+  themeColor="#ffffff"
+  extraCss={['/css/about.css']}
+>
+  <SiteHeader active="info" />
+
+  <!-- 서브 메뉴 -->
+  <div class="submenu-container">
+    <nav class="submenu">
+      <div class="submenu-item">
+        <h3 class="multilingual"><button class="submenu-btn left active" data-target="about-section">About ABOUT</button></h3>
+      </div>
+      {hasContact && (
+        <div class="submenu-item">
+          <h3 class="multilingual"><button class="submenu-btn" data-target="contact-section">Contact CONTACT</button></h3>
+        </div>
+      )}
+    </nav>
+  </div>
+
+  <main>
+    <!-- About 섹션 -->
+    <section id="about-section" class="content-section submenu-content" style="display:block;">
+      <div class="container-full multilingual">
+        <div class="about-content multilingual flex2column">
+          <div class="submenu-item2">
+            <p class="centeralign" set:html={aboutHtml} />
+          </div>
+          {careerHtml && (
+            <div class="submenu-item2 flex2column">
+              <p class="centeralign" set:html={careerHtml} />
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact 섹션 -->
+    <section id="contact-section" class="content-section submenu-content" style="display:none;">
+      <div class="container-full multilingual">
+        <div class="contact-info">
+          {has(about.email) && (
+            <div class="contact-item">
+              <p>Email<br><a href={`mailto:${about.email}`}>{about.email}</a></p>
+            </div>
+          )}
+          {has(about.instagram) && (
+            <div class="contact-item">
+              <p>Instagram<br><a href={about.instagram}>{about.instagramHandle || about.instagram}</a></p>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <SiteFooter />
+
+  <Fragment slot="scripts">
+    <script is:inline src="/js/about.js"></script>
+  </Fragment>
+</BaseLayout>

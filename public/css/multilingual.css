@@ -1,0 +1,101 @@
+/* p {
+  font-size: 14px;
+  line-height: 18px;
+} */
+span.ml-en {
+  font-family: "neue-haas-grotesk-display", -apple-system, sans-serif;
+  font-weight: 600;
+}
+
+span.ml-ko {
+  font-family: "pretendard", sans-serif;
+  font-weight: 800;
+  /*below two lines are for baseline shift */
+  position:relative;
+  top:0;
+}
+
+span.ml-num {
+  font-family: "neue-haas-grotesk-display", -apple-system, sans-serif;
+  /* font-weight: 600; */
+  /*below two lines are for baseline shift */
+  position:relative;
+  top:0;
+}
+
+span.ml-punct {
+  font-family: "neue-haas-grotesk-display", -apple-system, sans-serif;
+  font-weight: 600;
+  /*below two lines are for baseline shift */
+  position:relative;
+  top:0;
+}
+
+
+p span.ml-en {
+  font-family: "neue-haas-grotesk-display", -apple-system, sans-serif;
+  font-weight: 500;
+}
+
+p span.ml-ko {
+  font-family: "pretendard", sans-serif;
+  font-weight: 400;
+}
+
+p span.ml-num {
+  font-family: "neue-haas-grotesk-display", -apple-system, sans-serif;
+  font-weight: 500;
+}
+p span.ml-punct {
+  font-family: "neue-haas-grotesk-display", -apple-system, sans-serif;
+  font-weight: 500;
+}
+
+h3 span.ml-en {
+  font-family: "neue-haas-grotesk-display", -apple-system, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.1rem;
+  font-size: 3.7rem;
+  position: relative;
+  top: 0.1rem;
+}
+h3 span.ml-ko {
+  font-family: "pretendard", sans-serif;
+  font-weight: 800;
+  font-size: 3.6rem;
+  /*below two lines are for baseline shift */
+  position:relative;
+  top:0;
+}
+h4 span.ml-en {
+  font-family: "neue-haas-grotesk-display", -apple-system, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.1rem;
+  font-size: 2.4rem;
+  position: relative;
+  top: 0.1rem;
+}
+h4 span.ml-ko {
+  font-family: "pretendard", sans-serif;
+  font-weight: 800;
+  font-size: 2.4rem;
+  /*below two lines are for baseline shift */
+  position:relative;
+  top:0;
+}
+
+
+
+/* span.ml-cn {
+  font-family: 'Nanum Gothic', Arial, sans-serif;
+  font-size:15px;
+  position:relative;
+  top:0;
+}
+
+span.ml-jp {
+  font-family: 'Nanum Gothic', Arial, sans-serif;
+  font-size:15px;
+  position:relative;
+  top:0;
+} */

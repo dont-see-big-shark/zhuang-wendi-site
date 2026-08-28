@@ -1,0 +1,28 @@
+---
+// 없는 주소로 들어왔을 때. 사이트 껍데기는 그대로 두고 안내 한 줄만 둔다.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+---
+
+<BaseLayout title="ZHUANG.WENDI - Page Not Found" description="Page not found" themeColor="#ffffff">
+  <SiteHeader />
+
+  <main class="multilingual">
+    <p class="notfound">
+      Page not found. <a href="/">Go to home</a>
+    </p>
+  </main>
+
+  <SiteFooter />
+</BaseLayout>
+
+<style is:global>
+  .notfound {
+    padding: 6rem 0 12rem;
+  }
+  .notfound a {
+    color: inherit;
+    text-decoration: underline;
+  }
+</style>
