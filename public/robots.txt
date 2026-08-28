@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin
 
-Sitemap: https://www.zhuangwendi.vercel.app/sitemap-index.xml
+Sitemap: https://zhuang-wendi-site.vercel.app/sitemap-index.xml

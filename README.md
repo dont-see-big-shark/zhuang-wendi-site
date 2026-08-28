@@ -15,7 +15,7 @@ Based on [leecheong.com](https://github.com/hatokkari/leecheong.com) (custom des
 The `/admin` panel uses Sveltia CMS with GitHub OAuth. To enable it:
 
 1. Deploy your own OAuth proxy: fork [sveltia-cms-auth](https://github.com/sveltia/sveltia-cms-auth) and deploy to Cloudflare Workers.
-2. Add your domain (e.g. `zhuangwendi.vercel.app`) to the worker's allowed domains.
+2. Add your domain (e.g. `zhuang-wendi-site.vercel.app`) to the worker's allowed domains.
 3. Update `public/admin/config.yml`:
    - `backend.repo`: your GitHub username / repo name
    - `backend.base_url`: your Cloudflare Worker URL

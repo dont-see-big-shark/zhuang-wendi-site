@@ -3,7 +3,7 @@ import sitemap from '@astrojs/sitemap';
 import multilingualPrerender from './scripts/multilingual-prerender.mjs';
 
 export default defineConfig({
-  site: 'https://www.zhuangwendi.vercel.app',  // apex 는 www 로 308 리다이렉트됨
+  site: 'https://zhuang-wendi-site.vercel.app',  // apex 는 www 로 308 리다이렉트됨
   integrations: [
     // 관리자 페이지는 검색엔진에 올릴 이유가 없다.
     sitemap({ filter: (page) => !page.includes('/admin') }),
