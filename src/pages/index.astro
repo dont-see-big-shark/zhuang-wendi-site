@@ -6,7 +6,7 @@ import SiteFooter from '../components/SiteFooter.astro';
 import { resolvePhotos } from '../lib/images';
 
 // 首页拼图 = 所有摄影作品的图片（顺序由 JS 随机打乱）
-const projects = (await getCollection('photos'))
+const projects = (await getCollection('works'))
   .filter((p) => !p.data.hidden)
   .sort((a, b) => a.data.order - b.data.order);
 

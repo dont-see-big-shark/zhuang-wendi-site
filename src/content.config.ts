@@ -7,31 +7,30 @@ const optString = z.preprocess(
   z.string().optional(),
 );
 
-// 摄影作品（首页拼图和 Works 的 PHOTOS 区共用）
-const photos = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/photos' }),
-  schema: z.object({
+// 后台曾用 `works` 作为图片字段名，这里兼容旧写法，避免老条目的图片悄悄消失。
+const imagesField = z.preprocess(
+  (v) => {
+    if (v && typeof v === 'object' && !Array.isArray(v)) {
+      const raw = v as Record<string, unknown>;
+      if (raw.photos == null && Array.isArray(raw.works)) {
+        return { ...raw, photos: raw.works };
+      }
+    }
+    return v;
+  },
+  z.object({
     title: z.string(),
     year: optString,
     order: z.number().default(0), // 显示顺序
-    description: optString, // 创作说明（可选）
     photos: z.array(z.string()).default([]), // 有序图片路径
     hidden: z.boolean().default(false),
   }),
+);
+
+// 作品（首页拼图和 Works 页共用）
+const works = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/works' }),
+  schema: imagesField,
 });
 
-// 出版（Works 的 BOOKS 区）
-const books = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/books' }),
-  schema: z.object({
-    title: z.string(),
-    year: optString,
-    order: z.number().default(0),
-    buyLink: optString, // 购买链接（可选）
-    description: optString,
-    photos: z.array(z.string()).default([]),
-    hidden: z.boolean().default(false),
-  }),
-});
-
-export const collections = { photos, books };
+export const collections = { works };

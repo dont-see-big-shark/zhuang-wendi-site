@@ -2,14 +2,12 @@
 title: 作品
 year: '2026'
 order: 10
-works:
-  - /src/assets/photos/test-blue/生成Caduceus产品logo (2).webp
-  - /src/assets/photos/test-blue/test-blue_1.webp
 photos:
-  - /src/assets/photos/test-blue/test-blue_1.webp
-  - /src/assets/photos/test-blue/test-blue_2.webp
-  - /src/assets/photos/test-blue/test-blue_3.webp
-  - /src/assets/photos/test-blue/test-blue_4.webp
+  - /src/assets/works/test-blue/生成Caduceus产品logo (2).webp
+  - /src/assets/works/test-blue/test-blue_1.webp
+  - /src/assets/works/test-blue/test-blue_2.webp
+  - /src/assets/works/test-blue/test-blue_3.webp
+  - /src/assets/works/test-blue/test-blue_4.webp
 ---
 
 这是一条**测试用例**：验证摄影作品的前台上架流程。

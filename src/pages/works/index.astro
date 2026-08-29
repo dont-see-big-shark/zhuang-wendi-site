@@ -5,18 +5,18 @@ import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import { resolvePhotos } from '../../lib/images';
 
-const photos = (await getCollection('works'))
+const works = (await getCollection('works'))
   .filter((p) => !p.data.hidden)
   .sort((a, b) => a.data.order - b.data.order);
 
 // data-project(slug) → 优化后的 webp URL 数组（works.js 从 window 读取）
 const worksImages: Record<string, string[]> = {};
 
-const photoItems = [];
-for (const p of photos) {
+const workItems = [];
+for (const p of works) {
   worksImages[p.id] = (await resolvePhotos(p.data.photos)).map((x) => x.mid);
   const { Content } = await render(p);
-  photoItems.push({ data: p.data, slug: p.id, Content });
+  workItems.push({ data: p.data, slug: p.id, Content });
 }
 ---
 
@@ -35,9 +35,6 @@ for (const p of photos) {
         <div class="submenu-item">
           <h3 class="multilingual"><button class="submenu-btn left active" data-target="photos-section">PHOTOS</button></h3>
         </div>
-        <div class="submenu-item">
-          <h3 class="multilingual"><button class="submenu-btn" data-target="books-section">BOOKS</button></h3>
-        </div>
       </nav>
     </div>
 
@@ -46,7 +43,7 @@ for (const p of photos) {
       <section id="photos-section" class="works-section submenu-content" style="display:block;">
         <div class="project-list">
           {
-            photoItems.map((it) => {
+            workItems.map((it) => {
               const Body = it.Content;
               return (
                 <div class="project-row">

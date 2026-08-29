@@ -12,44 +12,16 @@ $(function() {
 
     // 进入页面时强制先显示 PHOTOS 区块
     $('.submenu-btn[data-target="photos-section"]').addClass('active');
-    $('.submenu-btn[data-target="books-section"]').removeClass('active');
     $('#photos-section').show();
-    $('#books-section').hide();
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 各项目的图片目录映射
-    const projectFolders = {
-        'backward-drift': 'backward-drift',
-        'glass-eye': 'glass-eye',
-        'the-faceless': 'the-faceless',
-        'shade-of-blue': 'shade-of-blue',
-        'imperfect-jeonju': 'imperfect-jeonju',
-        'glass-eye-book': 'glass-eye',
-        'shade-of-blue-book': 'shade-of-blue'
-    };
-
-    // 图片格式映射
-    const imageFormat = {
-        'backward-drift': 'webp',
-        'glass-eye': 'webp',
-        'the-faceless': 'webp',
-        'shade-of-blue': 'webp',
-        'imperfect-jeonju': 'webp',
-        'glass-eye-book': 'webp',
-        'shade-of-blue-book': 'webp'
-    };
-
-    // 图片基础路径映射
-    const imagePath = {
-        'backward-drift': '/src/images/photos/',
-        'glass-eye': '/src/images/photos/',
-        'the-faceless': '/src/images/photos/',
-        'shade-of-blue': '/src/images/photos/',
-        'imperfect-jeonju': '/src/images/photos/',
-        'glass-eye-book': '/src/images/books/',
-        'shade-of-blue-book': '/src/images/books/'
-    };
+    // 项目清单来自页面上的 .project-gallery-col[data-project]（由后台条目生成），
+    // 不再写死在 JS 里 —— 新增/删除条目后无需同步这张表。
+    const projectIds = Array.from(
+        document.querySelectorAll('.project-gallery-col[data-project]'),
+        (el) => el.dataset.project,
+    );
 
     // 存放每个项目图片列表的对象
     const projectImages = {};
@@ -59,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 加载状态跟踪
     const loadingState = {
-        totalProjects: Object.keys(projectFolders).length,
+        totalProjects: projectIds.length,
         loadedProjects: 0,
         isInitialized: false
     };
@@ -72,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('🚀 开始加载所有项目图片...');
         
         // 并行生成所有项目的图片列表
-        const projectPromises = Object.keys(projectFolders).map(project => {
+        const projectPromises = projectIds.map(project => {
             return generateImageList(project);
         });
 
@@ -80,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
         await Promise.all(projectPromises);
         
         // 并行加载所有项目的图片
-        const loadingPromises = Object.keys(projectFolders).map(project => {
+        const loadingPromises = projectIds.map(project => {
             return loadImagesForProject(project);
         });
 
@@ -129,62 +101,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const imagePaths = projectImages[projectId];
             if (!imagePaths || imagePaths.length === 0) {
+                console.warn(`⚠️ ${projectId} 没有图片，请检查后台该条目的照片字段`);
                 resolve();
                 return;
             }
 
-            // BOOKS 区块预加载全部图片，PHOTOS 只先加载 5 张
-            const initialLoadCount = projectId.includes('book') ? imagePaths.length : 5;
-            
-            // 图片预加载（BOOKS 区块用）
-            if (projectId.includes('book')) {
-                preloadImages(projectId, imagePaths).then(() => {
-                    // 全部图片加载完成后再加入轮播
-                    addImagesToSlider(projectId, imagePaths);
-                    setupSliderControls(projectId);
-                    projectState[projectId].isLoaded = true;
-                    loadingState.loadedProjects++;
-                    console.log(`📚 ${projectId} 加载完成 (${imagePaths.length} 张图片)`);
-                    resolve();
-                });
-            } else {
-                // PHOTOS 区块只加载初始图片
-                addImagesToSlider(projectId, imagePaths.slice(0, initialLoadCount));
-                setupSliderControls(projectId);
-                projectState[projectId].isLoaded = true;
-                loadingState.loadedProjects++;
-                console.log(`📸 ${projectId} 初始加载完成 (${initialLoadCount} 张图片)`);
-                resolve();
-            }
-        });
-    }
-
-    // 图片预加载（BOOKS 区块用）
-    function preloadImages(projectId, imagePaths) {
-        return new Promise((resolve) => {
-            let loadedCount = 0;
-            const totalImages = imagePaths.length;
-
-            imagePaths.forEach((path, index) => {
-                const img = new Image();
-                img.onload = () => {
-                    projectState[projectId].loadedPaths.push(path);
-                    loadedCount++;
-                    
-                    if (loadedCount === totalImages) {
-                        resolve();
-                    }
-                };
-                img.onerror = () => {
-                    console.warn(`⚠️ 图片加载失败: ${path}`);
-                    loadedCount++;
-                    
-                    if (loadedCount === totalImages) {
-                        resolve();
-                    }
-                };
-                img.src = path;
-            });
+            // 先只加载前 5 张，翻到后面再按需追加（首屏更快）
+            const initialLoadCount = 5;
+            addImagesToSlider(projectId, imagePaths.slice(0, initialLoadCount));
+            setupSliderControls(projectId);
+            projectState[projectId].isLoaded = true;
+            loadingState.loadedProjects++;
+            console.log(`📸 ${projectId} 初始加载完成 (${Math.min(initialLoadCount, imagePaths.length)} 张图片)`);
+            resolve();
         });
     }
 
@@ -264,14 +193,14 @@ document.addEventListener('DOMContentLoaded', () => {
         function go(delta) {
             const st = projectState[projectId];
             if (delta > 0) {
-                if (st.currentIndex >= st.loadedImages - 1 && !projectId.includes('book')) {
+                if (st.currentIndex >= st.loadedImages - 1) {
                     loadMoreImages(projectId, 3);
                 }
                 if (st.currentIndex < st.loadedImages - 1) {
                     st.currentIndex++;
                     updateSlider(projectId);
                     refreshCounter();
-                    if (!projectId.includes('book') && st.currentIndex >= st.loadedImages - 2) {
+                    if (st.currentIndex >= st.loadedImages - 2) {
                         loadMoreImages(projectId, 3);
                     }
                 }
