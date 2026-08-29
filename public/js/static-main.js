@@ -6,24 +6,24 @@ document.addEventListener('DOMContentLoaded', () => {
     let shuffledImageList = []; // 打乱后的图片列表
     let loadedImages = []; // 已加载的图片
     let filterMode = 'blue'; // 滤镜状态: 'blue', 'grayscale', 'none'
-    
+
     // 移动端优化变量
     const isMobile = window.innerWidth <= 768;
-    const isSlowConnection = navigator.connection && 
-        (navigator.connection.effectiveType === 'slow-2g' || 
-         navigator.connection.effectiveType === '2g' ||
-         navigator.connection.effectiveType === '3g');
-    const isFastConnection = navigator.connection && 
-        (navigator.connection.effectiveType === '4g' || 
-         navigator.connection.effectiveType === '5g');
-    
+    const isSlowConnection = navigator.connection &&
+        (navigator.connection.effectiveType === 'slow-2g' ||
+            navigator.connection.effectiveType === '2g' ||
+            navigator.connection.effectiveType === '3g');
+    const isFastConnection = navigator.connection &&
+        (navigator.connection.effectiveType === '4g' ||
+            navigator.connection.effectiveType === '5g');
+
     // 根据网络状态调整加载数量
     const initialLoadCount = isMobile ? (isSlowConnection ? 10 : 20) : 50;
     const loadMoreCount = isMobile ? (isSlowConnection ? 5 : 10) : 20;
     let currentLoadedCount = 0;
     let isLoading = false;
     let sequentialLoadingActive = false; // 顺序加载是否启用
-    
+
     // DOM 元素
     const imageGrid = document.getElementById('image-grid');
     const loadingIndicator = document.getElementById('loading-indicator');
@@ -35,11 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const gridIncrease = document.getElementById('grid-increase');
     const colorFilterToggle = document.getElementById('color-filter-toggle');
     const loadingPage = document.getElementById('loading-page');
-    
+
     // 图片列表由 Astro 构建时优化（webp）后注入 window。
     // （基于 CMS 集合，替代原先的硬编码/生成器）
     const imageList = (typeof window !== 'undefined' && window.__HOME_IMAGES__) || [];
-    
+
     // Fisher-Yates 洗牌算法
     function shuffle(array) {
         const shuffled = [...array];
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         return shuffled;
     }
-    
+
     // 告诉浏览器按显示尺寸选图（列数变化时重新计算）
     function gridSizesAttr() {
         // 展开动画期间会短暂经过 1 列状态。
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. 图片插入后，连接画廊/动画/事件
     let allImages = [];
     let currentImageIndex = 0;
-    
+
     function setupImageEvents() {
         const allImageItems = document.querySelectorAll('.image-item');
 
@@ -162,13 +162,13 @@ document.addEventListener('DOMContentLoaded', () => {
             // 已处理的格子直接跳过（每追加一批都会重新触发）
             if (imageItem.dataset.bound === '1') return;
             imageItem.dataset.bound = '1';
-            
+
             if (img.complete) {
                 setTimeout(() => {
                     imageItem.classList.add('loaded');
                 }, Math.random() * 500);
             } else {
-                img.onload = function() {
+                img.onload = function () {
                     setTimeout(() => {
                         imageItem.classList.add('loaded');
                     }, Math.random() * 500);
@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
-    
+
     // 打开画廊视图
     function openGallery(imagePath) {
         galleryImage.src = imagePath;
@@ -187,13 +187,13 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = 'hidden'; // 禁止滚动
         currentImageIndex = allImages.findIndex(img => img.path === imagePath);
     }
-    
+
     // 关闭画廊视图
     function closeGallery() {
         galleryModal.classList.remove('active');
         document.body.style.overflow = '';
     }
-    
+
     // 上一张图片
     function prevImage() {
         if (currentImageIndex > 0) {
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
             galleryImage.src = allImages[currentImageIndex].path;
         }
     }
-    
+
     // 下一张图片
     function nextImage() {
         if (currentImageIndex < allImages.length - 1) {
@@ -209,35 +209,35 @@ document.addEventListener('DOMContentLoaded', () => {
             galleryImage.src = allImages[currentImageIndex].path;
         }
     }
-    
+
     // 修改网格列数
     function changeGridColumns(targetColumns = null) {
         if (targetColumns) {
             columnCount = targetColumns;
         }
-        
+
         // 更新网格类名（保留 loaded 类）
         const currentClasses = imageGrid.className.split(' ');
         const loadedClass = currentClasses.includes('loaded') ? 'loaded' : '';
-        
+
         // 移除所有 columns- 类
         currentClasses.forEach(className => {
             if (className.startsWith('columns-')) {
                 imageGrid.classList.remove(className);
             }
         });
-        
+
         // 设置基础类和 loaded 类
         imageGrid.className = 'image-grid';
         if (loadedClass) {
             imageGrid.classList.add(loadedClass);
         }
-        
+
         // 添加新的 columns- 类
         imageGrid.classList.add(`columns-${columnCount}`);
         applyFilterModeClass();
         applyGridSizes();
-        
+
         // 防止列数变化时动画重放
         const allImageItems = imageGrid.querySelectorAll('.image-item');
         allImageItems.forEach(imageItem => {
@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 imageItem.classList.add('loaded');
             }
         });
-        
+
         // 更新按钮状态
         updateGridButtonStates();
     }
@@ -265,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function getMaxColumns() {
         const screenWidth = window.innerWidth;
-        
+
         if (screenWidth <= 360) {
             return 4;
         } else if (screenWidth <= 480) {
@@ -289,13 +289,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateGridButtonStates() {
         if (gridDecrease && gridIncrease) {
             const maxColumns = getMaxColumns();
-            
+
             // 到达最小值（1）时禁用减号按钮
             gridDecrease.disabled = columnCount <= 1;
-            
+
             // 到达当前屏幕的最大列数时禁用加号按钮
             gridIncrease.disabled = columnCount >= maxColumns;
-            
+
             // 当前值超过最大值时进行修正
             if (columnCount > maxColumns) {
                 columnCount = maxColumns;
@@ -307,7 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 网格列数减一
     function decreaseGridColumns() {
         if (columnCount > 1) {
-            columnCount--;
+            columnCount++;
             changeGridColumns();
         }
     }
@@ -316,7 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function increaseGridColumns() {
         const maxColumns = getMaxColumns();
         if (columnCount < maxColumns) {
-            columnCount++;
+            columnCount--;
             changeGridColumns();
         }
     }
@@ -335,7 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 filterMode = 'blue';
                 break;
         }
-        
+
         // 更新按钮状态
         if (colorFilterToggle) {
             colorFilterToggle.classList.remove('grayscale', 'no-filter');
@@ -345,7 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 colorFilterToggle.classList.add('no-filter');
             }
         }
-        
+
         applyFilterModeClass();
 
         // 给所有图片套用滤镜（兼容渐进加载）
@@ -353,7 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
         allImages.forEach(img => {
             img.style.filter = getCurrentFilter();
         });
-        
+
         // 防止切换滤镜时动画重放
         const allImageItems = document.querySelectorAll('.image-item');
         allImageItems.forEach(imageItem => {
@@ -362,24 +362,24 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    
+
     // 初始加载动画（改进版）
     function startInitialAnimation() {
         // 显示加载页
         loadingPage.style.display = 'flex';
-        
+
         // 1.5 秒后上滑隐藏加载页（移动端优化）
         setTimeout(() => {
             loadingPage.classList.add('slide-up');
-            
+
             // 动画结束后隐藏加载页
             setTimeout(() => {
                 loadingPage.style.display = 'none';
                 loadingPage.classList.remove('slide-up');
-                
+
                 // 显示图片网格
                 imageGrid.classList.add('loaded');
-                
+
                 // 开始网格列数展开动画
                 startGridColumnAnimation();
             }, 1000);
@@ -387,7 +387,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    
+
     // 开始网格列数展开动画
     function startGridColumnAnimation() {
         let currentColumn = 1;
@@ -414,7 +414,7 @@ document.addEventListener('DOMContentLoaded', () => {
             changeGridColumns(currentColumn);
         }, 2000 / (target - 1));
     }
-    
+
     // 事件监听设置
     function setupEventListeners() {
         // 点击图片或箭头以外的区域时关闭画廊（没有关闭按钮）
@@ -422,11 +422,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.target.closest('#gallery-image, .gallery-prev, .gallery-next')) return;
             closeGallery();
         });
-        
+
         // 画廊翻页按钮
         galleryPrev.addEventListener('click', prevImage);
         galleryNext.addEventListener('click', nextImage);
-        
+
         // 键盘事件
         document.addEventListener('keydown', (e) => {
             if (galleryModal.classList.contains('active')) {
@@ -439,18 +439,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
-        
+
         // 网格列数增减按钮
         gridDecrease.addEventListener('click', decreaseGridColumns);
         gridIncrease.addEventListener('click', increaseGridColumns);
-        
+
         // 颜色滤镜切换按钮
         colorFilterToggle.addEventListener('click', toggleColorFilter);
-        
+
         // 窗口缩放事件
         window.addEventListener('resize', handleWindowResize);
     }
-    
+
     // 窗口缩放处理
     function handleWindowResize() {
         // 防抖定时器
@@ -459,31 +459,31 @@ document.addEventListener('DOMContentLoaded', () => {
             updateGridButtonStates();
         }, 250);
     }
-    
+
     // 页面初始化（改进版）
     async function initializePage() {
         // 1. 打乱图片列表
         shuffledImageList = shuffle(imageList);
-        
+
         // 2. 启动初始动画（2 秒后上滑加载页）
         startInitialAnimation();
-        
+
         // 3. 渐进式图片加载（移动端优化）
         await loadImagesProgressively();
-        
+
         // 4. 绑定事件
         setupImageEvents();
-        
+
         // 5. 设置事件监听
         setupEventListeners();
-        
+
         // 6. 添加滚动监听（无限滚动）
         setupScrollListener();
-        
+
         // 7. 初始化按钮状态
         updateGridButtonStates();
     }
-    
+
     // 图片加载: 只构建网格，下载交给浏览器
     async function loadImagesProgressively() {
         renderImages();
@@ -491,12 +491,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // （已弃用）旧版预下载逻辑的残留 —— 已由浏览器原生懒加载取代
-    function loadImageBatch() {}
+    function loadImageBatch() { }
 
     // 滚动监听设置
     function setupScrollListener() {
         let scrollTimeout;
-        
+
         window.addEventListener('scroll', () => {
             clearTimeout(scrollTimeout);
             scrollTimeout = setTimeout(() => {
@@ -504,55 +504,55 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 100);
         });
     }
-    
+
     // （已弃用）旧版预下载逻辑的残留 —— 已由浏览器原生懒加载取代
-    function startSequentialLoading() {}
+    function startSequentialLoading() { }
 
     async function checkAndLoadMoreImages() {
         if (isLoading || currentLoadedCount >= shuffledImageList.length) {
             return;
         }
-        
+
         // 顺序加载启用时跳过滚动触发
         if (sequentialLoadingActive) {
             return;
         }
-        
+
         // 滚动接近底部时加载更多
         const scrollPosition = window.scrollY + window.innerHeight;
         const documentHeight = document.documentElement.scrollHeight;
-        
+
         if (scrollPosition >= documentHeight - 500) { // 提前 500px 开始加载
             await loadMoreImages();
         }
     }
-    
+
     // 追加图片加载（滚动触发，与顺序加载并行）
     async function loadMoreImages() {
         if (isLoading) return;
-        
+
         // 顺序加载已覆盖全部图片时直接跳过
         if (currentLoadedCount >= shuffledImageList.length) {
             return;
         }
-        
+
         isLoading = true;
         const startIndex = currentLoadedCount;
         const endIndex = Math.min(currentLoadedCount + loadMoreCount, shuffledImageList.length);
         const newImages = shuffledImageList.slice(startIndex, endIndex);
-        
+
         console.log(`📥 滚动追加加载: ${startIndex + 1}~${endIndex} (${newImages.length} 张)`);
-        
+
         await loadImageBatch(newImages, startIndex);
         currentLoadedCount = endIndex;
-        
+
         // 更新网格
         updateImageGrid();
-        
+
         isLoading = false;
-        
+
         console.log(`✅ 滚动加载完成. 已加载 ${currentLoadedCount}/${shuffledImageList.length} 张`);
-        
+
         // 还有未加载的图片时恢复顺序加载
         if (currentLoadedCount < shuffledImageList.length) {
             setTimeout(() => {
@@ -560,7 +560,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 100);
         }
     }
-    
+
     // 返回当前滤镜状态
     // 同时把当前滤镜模式写进网格类名。
     // 这样 CSS 才能实现"悬停预览其他模式"的反馈。
@@ -579,74 +579,74 @@ document.addEventListener('DOMContentLoaded', () => {
                 return 'sepia(100%) hue-rotate(180deg) saturate(200%)';
         }
     }
-    
+
     // 只给新增的图片绑定事件
     function setupNewImageEvents(startIndex) {
         const newImageItems = imageGrid.querySelectorAll('.image-item');
         const newItems = Array.from(newImageItems).slice(startIndex);
-        
+
         newItems.forEach((imageItem) => {
             const img = imageItem.querySelector('img');
-            
+
             // 给新图片套用入场动画
             if (img.complete) {
                 setTimeout(() => {
                     imageItem.classList.add('loaded');
                 }, Math.random() * 500);
             } else {
-                img.onload = function() {
+                img.onload = function () {
                     setTimeout(() => {
                         imageItem.classList.add('loaded');
                     }, Math.random() * 500);
                 };
             }
-            
+
             // 绑定点击事件
             img.addEventListener('click', () => {
                 openGallery(img.dataset.full);
             });
         });
-        
+
         // 更新 allImages 数组（只追加新图片）
         const newImageData = newItems.map(item => ({
             element: item,
             path: item.querySelector('img').src
         }));
-        
+
         allImages = allImages.concat(newImageData);
     }
-    
+
     // 更新图片网格（保留已有图片，只追加新的）
     function updateImageGrid() {
         const loadedImageElements = loadedImages
             .filter(img => img && img.loaded && img.element)
             .map(img => img.element);
-        
+
         // 检查网格中现有图片数量
         const currentGridItems = imageGrid.querySelectorAll('.image-item');
         const currentCount = currentGridItems.length;
-        
+
         // 只处理新增的图片
         const newImages = loadedImageElements.slice(currentCount);
-        
+
         // 只把新图片加进网格
         newImages.forEach((img, index) => {
             const actualIndex = currentCount + index;
             const imageItem = document.createElement('div');
             imageItem.className = 'image-item';
             imageItem.dataset.index = actualIndex;
-            
+
             const imgClone = img.cloneNode(true);
             imgClone.style.filter = getCurrentFilter();
             imageItem.appendChild(imgClone);
-            
+
             imageGrid.appendChild(imageItem);
         });
-        
+
         // 只给新增的图片绑定事件
         setupNewImageEvents(currentCount);
     }
-    
+
     // 执行页面初始化
     initializePage();
 });
