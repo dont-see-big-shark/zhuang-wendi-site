@@ -1,6 +1,6 @@
 ---
-title: "蓝色练习"
-year: "2026"
+title: 作品
+year: '2026'
 order: 10
 photos:
   - /src/assets/photos/test-blue/test-blue_1.webp
