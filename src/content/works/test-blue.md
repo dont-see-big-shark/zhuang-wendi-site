@@ -4,6 +4,7 @@ year: '2026'
 order: 10
 works:
   - /src/assets/photos/test-blue/生成Caduceus产品logo (2).webp
+  - /src/assets/photos/test-blue/test-blue_1.webp
 photos:
   - /src/assets/photos/test-blue/test-blue_1.webp
   - /src/assets/photos/test-blue/test-blue_2.webp
