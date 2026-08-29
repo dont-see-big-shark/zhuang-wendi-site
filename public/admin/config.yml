@@ -26,10 +26,10 @@ media_folder: "src/assets"
 public_folder: "/src/assets"
 
 collections:
-  - name: photos
-    label: 摄影作品 (PHOTOS)
-    label_singular: 摄影作品
-    folder: "src/content/photos"
+  - name: works
+    label: 作品
+    label_singular: 作品
+    folder: "src/content/works"
     create: true
     slug: "{{slug}}"
     extension: md
@@ -39,33 +39,11 @@ collections:
       - { name: title, label: 标题, widget: string }
       - { name: year, label: 年份, widget: string, required: false }
       - { name: order, label: "显示顺序（数字越小越靠前）", widget: number, value_type: int, default: 0, required: false }
-      - name: photos
+      - name: works
         label: "照片（可多张上传，拖拽调整顺序）"
         widget: list
         required: false
-        field: { name: image, label: 图片, widget: image, media_folder: "/src/assets/photos/{{slug}}", public_folder: "/src/assets/photos/{{slug}}" }
-      - { name: hidden, label: 隐藏（不在前台显示）, widget: boolean, default: false, required: false }
-      - { name: body, label: "文字说明（显示在作品页，支持 Markdown）", widget: markdown, required: false }
-
-  - name: books
-    label: 出版 (BOOKS)
-    label_singular: 出版物
-    folder: "src/content/books"
-    create: true
-    slug: "{{slug}}"
-    extension: md
-    format: frontmatter
-    sortable_fields: [order, title, year]
-    fields:
-      - { name: title, label: 标题, widget: string }
-      - { name: year, label: 年份, widget: string, required: false }
-      - { name: order, label: "显示顺序（数字越小越靠前）", widget: number, value_type: int, default: 0, required: false }
-      - { name: buyLink, label: 购买链接（选填）, widget: string, required: false }
-      - name: photos
-        label: "图片（可多张上传，拖拽调整顺序）"
-        widget: list
-        required: false
-        field: { name: image, label: 图片, widget: image, media_folder: "/src/assets/books/{{slug}}", public_folder: "/src/assets/books/{{slug}}" }
+        field: { name: image, label: 图片, widget: image, media_folder: "/src/assets/works/{{slug}}", public_folder: "/src/assets/photos/{{slug}}" }
       - { name: hidden, label: 隐藏（不在前台显示）, widget: boolean, default: false, required: false }
       - { name: body, label: "文字说明（显示在作品页，支持 Markdown）", widget: markdown, required: false }
 
