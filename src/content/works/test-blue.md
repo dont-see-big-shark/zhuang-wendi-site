@@ -1,6 +1,6 @@
 ---
-title: 作品
-year: '2026'
+title: Floating Conductor
+year: '2025'
 order: 10
 photos:
   - /src/assets/works/test-blue/b1dc3e80e2a916af9db01017dc1705 2.webp
