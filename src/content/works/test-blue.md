@@ -10,6 +10,7 @@ photos:
   - /src/assets/works/test-blue/IMG_1587.webp
   - /src/assets/works/test-blue/618a1314ce142fb688100613d4e55b56.webp
   - /src/assets/works/test-blue/DSCF7992.webp
+  - /src/assets/works/test-blue/IMG_9516.webp
 hidden: false
 ---
 
