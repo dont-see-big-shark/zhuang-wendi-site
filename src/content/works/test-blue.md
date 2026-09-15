@@ -5,7 +5,7 @@ order: 10
 photos:
   - /src/assets/works/test-blue/b1dc3e80e2a916af9db01017dc1705 2.webp
   - /src/assets/works/test-blue/6eef45221174ec929814aae0fa4240ea 2.webp
-hidden: true
+hidden: false
 ---
 
 这是一条**测试用例**：验证摄影作品的前台上架流程。
