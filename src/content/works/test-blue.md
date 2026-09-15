@@ -1,6 +1,6 @@
 ---
 title: Floating Conductor
-year: '2025'
+year: 2023-2026
 order: 10
 photos:
   - /src/assets/works/test-blue/b1dc3e80e2a916af9db01017dc1705 2.webp
@@ -13,10 +13,4 @@ photos:
 hidden: false
 ---
 
-这是一条**测试用例**：验证摄影作品的前台上架流程。
-
-- 首页拼图会随机展示本组的图片
-- Works 页的 PHOTOS 区块会按上面的顺序生成轮播
-- 这段文字说明会显示在作品页左侧
-
-确认后可在后台（/admin）修改或删除本条目。
+From 2023 to 2026, I have consistently explored diverse expressive forms through sound as my core medium. I use sound to perceive the body and surrounding environments, and interpret electronic music within both everyday and non‑everyday contexts, investigating the potential of sound across varied spatial settings.
